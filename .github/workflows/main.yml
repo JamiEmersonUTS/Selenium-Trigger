@@ -5,7 +5,9 @@ jobs:
   trigger_action:
     runs-on: ubuntu-latest
     steps:
-    - name: Trigger another repo's GitHub Action
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: My Action
       uses: ./.github/workflows/Selenium-Action_Template.yaml
       with: 
         args: trigger
