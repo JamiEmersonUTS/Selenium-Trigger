@@ -1,1 +1,13 @@
 
+name: Trigger another repo's GitHub Action
+on: [push]
+jobs:
+  trigger_action:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Trigger another repo's GitHub Action
+      uses: actions/bin/filter@v1
+      with: 
+        args: trigger
+        repository: JamiEmersonUTS/selenium-github-actions
+        repo-token: ${{ secrets.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 }}
