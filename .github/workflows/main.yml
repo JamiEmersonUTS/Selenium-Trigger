@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Trigger another repo's GitHub Action
-      uses: actions/bin/filter@v1
+      uses: ./.github/workflows/Selenium-Action_Template.yaml
       with: 
         args: trigger
         repository: JamiEmersonUTS/selenium-github-actions
