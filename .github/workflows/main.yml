@@ -10,12 +10,12 @@ on:
       workflow2_github_account:
         description: 'GitHub Account Owner'
         required: true
-        default: JamiEmersonUTS
+        default: ':JamiEmersonUTS'
 
       workflow2_repo_github:
         description: 'repo-name'
         required: true
-        default: selenium-github-actions
+        default: ':selenium-github-actions'
 
 jobs:
   build:
