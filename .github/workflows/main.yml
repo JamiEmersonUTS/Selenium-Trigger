@@ -1,25 +1,32 @@
-name: Deploy
+name: workflow_01
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+     inputs:
+      Workflow_2:
+        description: 'Workflow 2 which will be triggered'
+        required: true
+        default: 'Run Selenium On GitHub Action'
+
+      workflow2_github_account:
+        description: 'GitHub Account Owner'
+        required: true
+        default: 'JamiEmersonUTS'
+
+      workflow2_repo_github:
+        description: 'repository'
+        required: true
+        default: 'selenium-github-actions'
+
 jobs:
   build:
-    name: Run Web App
     runs-on: ubuntu-latest
+
     steps:
-      - name: Build Web App
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Test
         run: |
-          echo "Build Web App"
-          sleep 10s
-      - uses: convictional/trigger-workflow-and-wait@v1.3.0
-        with:
-          owner: JamiEmersonUTS
-          repo: selenium-github-actions
-          github_token: ${{ secrets.ACTIONS_KEY }}
-          workflow_file_name: Selenium-Action_Template.yaml
-          ref: main
-      - name: Deploy Web App
-        run: |
-          echo "Deploy Web App"
-          sleep 10s
+          curl -X POST https://api.github.com/repos/JamiEmersonUTS/selenium-github-actions/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.ACTIONS_KEY }} \
+          --data '{"event_type": "Trigger Workflow", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+      - uses: actions/checkout@v3
