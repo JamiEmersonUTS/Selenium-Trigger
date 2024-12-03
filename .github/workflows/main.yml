@@ -18,7 +18,7 @@ on:
         default: 'selenium-github-actions'
 
 jobs:
-  trigger-workflow
+  trigger-workflow:
     runs-on: ubuntu-latest
 
     steps:
