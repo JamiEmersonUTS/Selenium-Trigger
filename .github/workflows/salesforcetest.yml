@@ -7,24 +7,12 @@ jobs:
   trigger-smoke-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Resolve target repo + default branch
-        env:
-          GH_TOKEN: ${{ secrets.CROSS_REPO_WORKFLOW_TOKEN }}
+      - name: Set target repo values
         run: |
           set -euo pipefail
-
-          TARGET_REPO="uts-itd/UTS_dotnet8_MultiPlatformAutomation"
-          WORKFLOW_FILE="salesforcesmoketests.yml"
-
-          DEFAULT_BRANCH="$(gh repo view "$TARGET_REPO" --json defaultBranchRef -q .defaultBranchRef.name)"
-
-          echo "TARGET_REPO=$TARGET_REPO" >> "$GITHUB_ENV"
-          echo "WORKFLOW_FILE=$WORKFLOW_FILE" >> "$GITHUB_ENV"
-          echo "DEFAULT_BRANCH=$DEFAULT_BRANCH" >> "$GITHUB_ENV"
-
-          test -n "$TARGET_REPO"
-          test -n "$WORKFLOW_FILE"
-          test -n "$DEFAULT_BRANCH"
+          echo "TARGET_REPO=uts-itd/UTS_dotnet8_MultiPlatformAutomation" >> "$GITHUB_ENV"
+          echo "WORKFLOW_FILE=salesforcesmoketests.yml" >> "$GITHUB_ENV"
+          echo "DEFAULT_BRANCH=main" >> "$GITHUB_ENV"   # change if target default branch is different
 
       - name: Trigger salesforcesmoketests.yml in target repo
         env:
