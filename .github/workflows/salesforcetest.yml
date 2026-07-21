@@ -2,41 +2,21 @@ name: Trigger UAT Smoke Tests (Manual)
 
 on:
   workflow_dispatch:
-    inputs:
-      target_repo:
-        description: 'Target repository in owner/repo format'
-        required: false
-        default: 'JamiEmersonUTS/Selenium-Automation'
-      workflow_file:
-        description: 'Workflow file name to trigger in target repo'
-        required: false
-        default: 'salesforcesmoketests.yml'
-      ref:
-        description: 'Branch/tag to run on (optional, defaults to target repo default branch)'
-        required: false
-        default: ''
 
 jobs:
   trigger-smoke-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Resolve target values
+      - name: Resolve target repo + default branch
         env:
           GH_TOKEN: ${{ secrets.CROSS_REPO_WORKFLOW_TOKEN }}
-          INPUT_TARGET_REPO: ${{ github.event.inputs.target_repo }}
-          INPUT_WORKFLOW_FILE: ${{ github.event.inputs.workflow_file }}
-          INPUT_REF: ${{ github.event.inputs.ref }}
         run: |
           set -euo pipefail
 
-          TARGET_REPO="${INPUT_TARGET_REPO:-JamiEmersonUTS/Selenium-Automation}"
-          WORKFLOW_FILE="${INPUT_WORKFLOW_FILE:-salesforcesmoketests.yml}"
+          TARGET_REPO="uts-itd/UTS_dotnet8_MultiPlatformAutomation"
+          WORKFLOW_FILE="salesforcesmoketests.yml"
 
-          if [ -n "${INPUT_REF:-}" ]; then
-            DEFAULT_BRANCH="$INPUT_REF"
-          else
-            DEFAULT_BRANCH="$(gh repo view "$TARGET_REPO" --json defaultBranchRef -q .defaultBranchRef.name)"
-          fi
+          DEFAULT_BRANCH="$(gh repo view "$TARGET_REPO" --json defaultBranchRef -q .defaultBranchRef.name)"
 
           echo "TARGET_REPO=$TARGET_REPO" >> "$GITHUB_ENV"
           echo "WORKFLOW_FILE=$WORKFLOW_FILE" >> "$GITHUB_ENV"
@@ -46,7 +26,7 @@ jobs:
           test -n "$WORKFLOW_FILE"
           test -n "$DEFAULT_BRANCH"
 
-      - name: Trigger target workflow
+      - name: Trigger salesforcesmoketests.yml in target repo
         env:
           GH_TOKEN: ${{ secrets.CROSS_REPO_WORKFLOW_TOKEN }}
         run: |
