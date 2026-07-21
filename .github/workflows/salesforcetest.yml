@@ -1,0 +1,16 @@
+name: Trigger UAT Smoke Tests (Manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  trigger-smoke-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger salesforcesmoketests.yml in automation repo
+        env:
+          GH_TOKEN: ${{ secrets.CROSS_REPO_WORKFLOW_TOKEN }}
+        run: |
+          gh workflow run salesforcesmoketests.yml \
+            --repo uts-itd/UTS_dotnet8_MultiPlatformAutomation \
+            --ref main
