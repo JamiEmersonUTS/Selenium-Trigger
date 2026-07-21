@@ -2,6 +2,11 @@ name: Trigger UAT Smoke Tests (Manual)
 
 on:
   workflow_dispatch:
+    inputs:
+      target_ref:
+        description: "Branch or tag in uts-itd/UTS_dotnet8_MultiPlatformAutomation to run"
+        required: true
+        default: "master"
 
 jobs:
   trigger-smoke-tests:
@@ -12,7 +17,7 @@ jobs:
           set -euo pipefail
           echo "TARGET_REPO=uts-itd/UTS_dotnet8_MultiPlatformAutomation" >> "$GITHUB_ENV"
           echo "WORKFLOW_FILE=salesforcesmoketests.yml" >> "$GITHUB_ENV"
-          echo "DEFAULT_BRANCH=main" >> "$GITHUB_ENV"   # change if target default branch is different
+          echo "TARGET_REF=${{ github.event.inputs.target_ref }}" >> "$GITHUB_ENV"
 
       - name: Trigger salesforcesmoketests.yml in target repo
         env:
@@ -22,4 +27,8 @@ jobs:
           gh auth status
           gh workflow run "$WORKFLOW_FILE" \
             --repo "$TARGET_REPO" \
-            --ref "$DEFAULT_BRANCH"
+            --ref "$TARGET_REF"
+
+      - name: Confirm dispatch request
+        run: |
+          echo "Triggered $WORKFLOW_FILE in $TARGET_REPO on ref $TARGET_REF"
