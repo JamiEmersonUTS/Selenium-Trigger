@@ -12,5 +12,5 @@ jobs:
           GH_TOKEN: ${{ secrets.CROSS_REPO_WORKFLOW_TOKEN }}
         run: |
           gh workflow run salesforcesmoketests.yml \
-            --repo uts-itd/UTS_dotnet8_MultiPlatformAutomation \
-            --ref main
+            --repo "$TARGET_REPO" \
+            --ref "$DEFAULT_BRANCH"
